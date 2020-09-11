@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1062947816542",
+    "firebase_url": "https://coachy-android.firebaseio.com",
+    "project_id": "coachy-android",
+    "storage_bucket": "coachy-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062947816542:android:bcc36bfd8da48f2c32a0cf",
+        "android_client_info": {
+          "package_name": "com.example.coachy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062947816542-ov9jls1s5isvh7jcu2io22ih78o5cm7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.coachy",
+            "certificate_hash": "ceecbe4f64e29e77ed7457c9c5dc52b69cfdb696"
+          }
+        },
+        {
+          "client_id": "1062947816542-jj0kq77c15otn7pddas6fq2db3qnn72m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCncjAyb9ivsfNTcf8Pn79jDUio23a4lMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062947816542-jj0kq77c15otn7pddas6fq2db3qnn72m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
