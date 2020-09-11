@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         int eden = 0;
+        int shon = 100;
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
