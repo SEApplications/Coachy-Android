@@ -2,18 +2,28 @@ package com.example.coachy;
 
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +32,34 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String firebaseRock;
+
+        mAuth = FirebaseAuth.getInstance();
+
+
+
+//        mAuth.createUserWithEmailAndPassword("shon.ohana1@gmail.com", "123456789")
+//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+////                            Log.d(TAG, "createUserWithEmail:success");
+//                            FirebaseUser user = mAuth.getCurrentUser();
+////                            updateUI(user);
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+////                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+////                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+////                                    Toast.LENGTH_SHORT).show();
+////                            updateUI(null);
+//                        }
+//                    }
+//                });
+
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
