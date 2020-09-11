@@ -9,4 +9,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+
+    //menu bottom navigation
+    <string name="tab_home">Home</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_profile">Profile</string>
+
+
 </resources>
