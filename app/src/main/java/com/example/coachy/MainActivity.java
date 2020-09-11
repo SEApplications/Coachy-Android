@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,7 +82,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        bottomNavigationBar.setOnItemSelected(());
+        bottomNavigationBar.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public boolean onItemSelect(int i) {
+                if (i == 0) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new FirstFragment()).commit();
+                    return true;
+                }else if (i == 1){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new SecondFragment()).commit();
+                    return true;
+                }else return true;
+
+            }
+        });
 
 
 
