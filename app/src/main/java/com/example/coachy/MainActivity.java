@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
@@ -18,9 +17,9 @@ import com.google.firebase.auth.FirebaseUser;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         bottomNavigationBar = (SmoothBottomBar)findViewById(R.id.bottomBarMain);
-
-
 
 
         bottomNavigationBar.setOnItemSelectedListener(new OnItemSelectedListener() {
