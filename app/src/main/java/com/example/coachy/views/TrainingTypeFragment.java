@@ -43,7 +43,6 @@ public class TrainingTypeFragment extends Fragment {
 
     private void initialTrainingListImages(View view){
         mDataSet = new ArrayList<>();
-//        mDataSet.add(new TrainingType(0,R.drawable.which_training,"which training"));
         mDataSet.add(new TrainingType(1,R.drawable.functional,"functional"));
         mDataSet.add(new TrainingType(2,R.drawable.crossfit,"crossfit"));
         mDataSet.add(new TrainingType(3,R.drawable.rubber_band,"rubber band"));
