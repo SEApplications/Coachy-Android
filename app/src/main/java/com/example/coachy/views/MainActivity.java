@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, new TrainingTypeFragment()).commit();
                     return true;
                 case 1:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SecondFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SearchFragment()).commit();
                     return true;
                 default:
                     return false;
