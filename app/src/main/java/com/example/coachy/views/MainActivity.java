@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, new TrainingTypeFragment()).commit();
                     return true;
                 case 1:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SearchFragment()).commit();
  //                   getSupportFragmentManager().beginTransaction().replace(R.id.frame, new DetailsTrainingFragment()).commit();
                     return true;
                 default:
