@@ -71,7 +71,7 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            coachProfile = itemView.findViewById(R.id.im_coach_profile);
+      //      coachProfile = itemView.findViewById(R.id.im_coach_profile);
             cardView = itemView.findViewById(R.id.parent_layout);
 
         }
