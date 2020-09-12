@@ -1,17 +1,15 @@
 package com.example.coachy.views;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.coachy.R;
+import com.example.coachy.adapters.TrainingTypeAdapter;
+import com.example.coachy.models.TrainingType;
 
+import androidx.appcompat.app.AppCompatActivity;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TrainingTypeAdapter.OnClickSelected{
 
 
     @Override
@@ -39,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case 1:
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SearchFragment()).commit();
+ //                   getSupportFragmentManager().beginTransaction().replace(R.id.frame, new DetailsTrainingFragment()).commit();
                     return true;
                 default:
                     return false;
@@ -50,6 +49,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void replaceFragment(TrainingType trainingType){
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new DetailsTrainingFragment(trainingType)).addToBackStack("back").commit();
+
+    }
+
+
+    @Override
+    public void onTrainingTypeSelected(TrainingType trainingType) {
+        replaceFragment(trainingType);
+    }
+
+
+
 
 
 }

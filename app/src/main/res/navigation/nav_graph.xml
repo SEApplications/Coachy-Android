@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.example.coachy.views.SecondFragment"
+        android:name="com.example.coachy.views.DetailsTrainingFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
