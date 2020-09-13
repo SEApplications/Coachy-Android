@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.coachy.R;
 import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -48,6 +49,10 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
      //   holder.trainingType.setImageResource(mDataSet.get(position).getTrainingImage());
 
+ //       Random rnd = new Random();
+ //       int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+ //       holder.playVideoBtn.setBackgroundTintList(color);
+
         holder.cardView.setOnClickListener(b->{
            // callback.onTrainingTypeSelected(mDataSet.get(position));
         });
@@ -68,12 +73,13 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
 
         private CircleImageView coachProfile;
         private CardView cardView;
+        private FloatingActionButton playVideoBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-      //      coachProfile = itemView.findViewById(R.id.im_coach_profile);
+            coachProfile = itemView.findViewById(R.id.im_coach_profile);
             cardView = itemView.findViewById(R.id.parent_layout);
-
+            playVideoBtn = itemView.findViewById(R.id.fab_play);
         }
     }
 
