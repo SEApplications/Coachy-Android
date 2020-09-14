@@ -2,14 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".views.SearchFragment">
 
 
-    <com.paulrybitskyi.persistentsearchview.PersistentSearchView
-        android:id="@+id/persistentSearchView"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search"
         android:layout_width="match_parent"
+        app:defaultQueryHint="Search"
+        android:layoutDirection="locale"
+        app:iconifiedByDefault="false"
         android:layout_height="wrap_content"
         android:paddingTop="4dp"
         android:paddingLeft="4dp"
@@ -22,7 +26,7 @@
         android:id="@+id/rv_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/persistentSearchView"/>
+        android:layout_below="@+id/search"/>
 
 
 </RelativeLayout>
