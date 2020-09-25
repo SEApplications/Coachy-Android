@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,10 +17,16 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.coachy.R;
+import com.example.coachy.adapters.DetailsTrainingAdapter;
 import com.example.coachy.adapters.SearchAdapter;
 import com.example.coachy.adapters.TrainingTypeAdapter;
 import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
 import com.paulrybitskyi.persistentsearchview.listeners.OnSearchConfirmedListener;
 import com.paulrybitskyi.persistentsearchview.utils.VoiceRecognitionDelegate;
@@ -34,10 +41,11 @@ public class SearchFragment extends Fragment {
     private ArrayList<Coach> mDataSet;
     private SearchView mSearchView;
     private SearchAdapter adapter;
-    public  ArrayList<Coach>  temp_search, mShowList;
+    public ArrayList<Coach> temp_search, mShowList;
     private RecyclerView searchRecycler;
     private int SEARCH_LENGTH = 0;
     private ArrayList<ArrayList<Coach>> searchArrayMatrix = new ArrayList<>();
+    private DatabaseReference databaseRef;
 
 
     public SearchFragment() {
@@ -49,7 +57,7 @@ public class SearchFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         }
     }
 
@@ -58,6 +66,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_search, container, false);
+
 
         initialTrainingListImages(v);
 
@@ -80,10 +89,8 @@ public class SearchFragment extends Fragment {
         });
 
 
-
         return v;
     }
-
 
 
     public void doSearch(String query, boolean voice) {
@@ -94,50 +101,49 @@ public class SearchFragment extends Fragment {
             words.add(query);
         }
 
-            try {
-                if (voice)
-                    mSearchView.setQuery(query, false);
-                //Empty List
-                if (query.length() == 0) {
-                    temp_search = getShowList();
-                    searchArrayMatrix = new ArrayList<>();
-                    SEARCH_LENGTH = query.length();
-//                    priceListName = "מציג קבוצה: " + String.valueOf(itemGroupList.getItemGroupsList().get(groupIdForTextView).getItmsGrpNam());
-                    setItemsRecyclerAdapter(temp_search);
-                    return;
-                }
-
-                //Case Writing text
-                if (SEARCH_LENGTH <= query.length()) {
-
-                    temp_search = new ArrayList<>();
-                    if (searchArrayMatrix.size() == 0)
-                        addSearchListToMatrix(getShowList(), query.length());
-
-                    for (Coach m : searchArrayMatrix.get(searchArrayMatrix.size() - 1)) {
-                        boolean match = true;
-                        for (int i = 0; i < words.size(); i++) {
-                            match = m.getFullName().toLowerCase().contains(words.get(i).toLowerCase());
-                            if (!match)
-                                break;
-                        }
-                        if (match)
-                            temp_search.add(m);
-                    }
-                    addSearchListToMatrix(temp_search, query.length());
-                } else {//Case Deleting text
-                    //searchArrayMatrix.remove(searchArrayMatrix.size()-1);
-                    removeSearchListFromMatrix(temp_search, query.length() - 1);
-                    temp_search = searchArrayMatrix.get(searchArrayMatrix.size() - 1);
-                }
-
+        try {
+            if (voice)
+                mSearchView.setQuery(query, false);
+            //Empty List
+            if (query.length() == 0) {
+                temp_search = getShowList();
+                searchArrayMatrix = new ArrayList<>();
                 SEARCH_LENGTH = query.length();
-
-//                priceListName = "מציג תוצאות חיפוש";
+//                    priceListName = "מציג קבוצה: " + String.valueOf(itemGroupList.getItemGroupsList().get(groupIdForTextView).getItmsGrpNam());
                 setItemsRecyclerAdapter(temp_search);
-            } catch (Exception e) {
-                e.printStackTrace();
+                return;
             }
+
+            //Case Writing text
+            if (SEARCH_LENGTH <= query.length()) {
+
+                temp_search = new ArrayList<>();
+                if (searchArrayMatrix.size() == 0)
+                    addSearchListToMatrix(getShowList(), query.length());
+
+                for (Coach m : searchArrayMatrix.get(searchArrayMatrix.size() - 1)) {
+                    boolean match = true;
+                    for (int i = 0; i < words.size(); i++) {
+                        match = m.getFullName().toLowerCase().contains(words.get(i).toLowerCase());
+                        if (!match)
+                            break;
+                    }
+                    if (match)
+                        temp_search.add(m);
+                }
+                addSearchListToMatrix(temp_search, query.length());
+            } else {//Case Deleting text
+                //searchArrayMatrix.remove(searchArrayMatrix.size()-1);
+                removeSearchListFromMatrix(temp_search, query.length() - 1);
+                temp_search = searchArrayMatrix.get(searchArrayMatrix.size() - 1);
+            }
+
+            SEARCH_LENGTH = query.length();
+
+            setItemsRecyclerAdapter(temp_search);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -194,18 +200,31 @@ public class SearchFragment extends Fragment {
     }
 
 
-    private void initialTrainingListImages(View view){
+    private void initialTrainingListImages(View view) {
         mDataSet = new ArrayList<>();
-        mDataSet.add(new Coach(0,"shon ohana",24,"blala","0541111111","1 year",null,null,null,null));
-        mDataSet.add(new Coach(0,"eden barhum",24,"blala","0541111111","1 year",null,null,null,null));
-        mDataSet.add(new Coach(0,"dolev ifergan",24,"blala","0541111111","1 year",null,null,null,null));
 
+        databaseRef = FirebaseDatabase.getInstance().getReference("coaches");
 
-        searchRecycler = view.findViewById(R.id.rv_search);
-        adapter = new SearchAdapter(getContext(),mDataSet);
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Coach coach = snapshot.getValue(Coach.class);
+                    mDataSet.add(coach);
+                    adapter = new SearchAdapter(getContext(), mDataSet);
 
-        searchRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        searchRecycler.setAdapter(adapter);
+                    searchRecycler = view.findViewById(R.id.rv_search);
+                    searchRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                    searchRecycler.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 

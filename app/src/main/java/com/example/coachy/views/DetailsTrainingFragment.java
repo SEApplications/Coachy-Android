@@ -9,6 +9,12 @@ import com.example.coachy.R;
 import com.example.coachy.adapters.DetailsTrainingAdapter;
 import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
+import com.example.coachy.models.UploadFirebase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,42 +28,66 @@ public class DetailsTrainingFragment extends Fragment {
 
     private TrainingType type;
     private List<Coach> coachList;
+    private DatabaseReference databaseRef;
+    private List<UploadFirebase> uploads;
 
     public DetailsTrainingFragment(TrainingType trainingType){
         this.type = trainingType;
-        coachList = initCoach();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initCoachesFromFirebase();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        return inflater.inflate(R.layout.fragment_details_trainings, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
 
+        trainingRecycler.setHasFixedSize(true);
+        trainingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        initCoachesFromFirebase();
+
+
     }
 
     private void init(View view){
-
-        RecyclerView trainingRecycler = view.findViewById(R.id.rv_training_coaches);
-        DetailsTrainingAdapter adapter = new DetailsTrainingAdapter(getContext(),coachList);
-
-        trainingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        trainingRecycler.setAdapter(adapter);
-
+        trainingRecycler = view.findViewById(R.id.rv_training_coaches);
     }
 
-    //only for check
-    private List<Coach> initCoach(){
-        List<Coach> coachList = new ArrayList<Coach>();
-        for(int i = 0; i < 5; i++){
-            coachList.add(new Coach());
-        }
+    RecyclerView trainingRecycler;
+    private List<Coach> initCoachesFromFirebase(){
+        List<Coach> coaches = new ArrayList<Coach>();
 
-        return coachList;
+//        databaseRef.getDatabase().setPersistenceEnabled(true);
+        databaseRef = FirebaseDatabase.getInstance().getReference("coaches");
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Coach coach = snapshot.getValue(Coach.class);
+                    coaches.add(coach);
+
+                }
+                DetailsTrainingAdapter adapter = new DetailsTrainingAdapter(getContext(),coaches);
+                trainingRecycler.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return coaches;
     }
 
 }

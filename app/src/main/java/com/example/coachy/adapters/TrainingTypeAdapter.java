@@ -37,7 +37,7 @@ public class TrainingTypeAdapter extends RecyclerView.Adapter<TrainingTypeAdapte
 
     public interface OnClickSelected{
 
-        public void onTrainingTypeSelected(TrainingType trainingType);
+        void onTrainingTypeSelected(TrainingType trainingType);
 
     }
 
