@@ -1,7 +1,11 @@
 package com.example.coachy.views;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,26 +13,40 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.coachy.R;
+import com.example.coachy.adapters.DetailsTrainingAdapter;
 import com.example.coachy.adapters.SearchAdapter;
 import com.example.coachy.adapters.TrainingTypeAdapter;
 import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
 import com.paulrybitskyi.persistentsearchview.listeners.OnSearchConfirmedListener;
 import com.paulrybitskyi.persistentsearchview.utils.VoiceRecognitionDelegate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class SearchFragment extends Fragment {
 
-    private List<Coach> mDataSet;
-    private PersistentSearchView persistentSearchView;
+    private ArrayList<Coach> mDataSet;
+    private SearchView mSearchView;
     private SearchAdapter adapter;
+    public ArrayList<Coach> temp_search, mShowList;
+    private RecyclerView searchRecycler;
+    private int SEARCH_LENGTH = 0;
+    private ArrayList<ArrayList<Coach>> searchArrayMatrix = new ArrayList<>();
+    private DatabaseReference databaseRef;
+
 
     public SearchFragment() {
         // Required empty public constructor
@@ -49,69 +67,164 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_search, container, false);
 
+
         initialTrainingListImages(v);
 
-        persistentSearchView = v.findViewById(R.id.persistentSearchView);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = v.findViewById(R.id.search);
+        mSearchView.setFocusable(false);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
-        persistentSearchView.setOnLeftBtnClickListener(new View.OnClickListener() {
-
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                // Handle the left button click
-                Toast.makeText(getContext(), "ye", Toast.LENGTH_SHORT).show();
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
 
-        });
-
-        persistentSearchView.setOnClearInputBtnClickListener(new View.OnClickListener() {
-
             @Override
-            public void onClick(View view) {
-                // Handle the clear input button click
-                Toast.makeText(getContext(), "yes", Toast.LENGTH_SHORT).show();
+            public boolean onQueryTextChange(String newText) {
+                doSearch(newText, false);
+                return false;
             }
-
         });
-
-        // Setting a delegate for the voice recognition input
-        persistentSearchView.setVoiceRecognitionDelegate(new VoiceRecognitionDelegate(this));
-
-        persistentSearchView.setOnSearchConfirmedListener(new OnSearchConfirmedListener() {
-
-            @Override
-            public void onSearchConfirmed(PersistentSearchView searchView, String query) {
-                // Handle a search confirmation. This is the place where you'd
-                // want to perform a search against your data provider.
-                adapter.getFilter().filter(query);
-                Toast.makeText(getContext(), query, Toast.LENGTH_SHORT).show();
-
-            }
-
-        });
-
-        // Disabling the suggestions since they are unused in
-        // the simple implementation
-        persistentSearchView.setSuggestionsDisabled(false);
 
 
         return v;
     }
 
 
+    public void doSearch(String query, boolean voice) {
+        List<String> words = new ArrayList<>();
+        if (query.contains(" ")) {
+            words.addAll(Arrays.asList(query.split("\\s+")));
+        } else {
+            words.add(query);
+        }
+
+        try {
+            if (voice)
+                mSearchView.setQuery(query, false);
+            //Empty List
+            if (query.length() == 0) {
+                temp_search = getShowList();
+                searchArrayMatrix = new ArrayList<>();
+                SEARCH_LENGTH = query.length();
+//                    priceListName = "מציג קבוצה: " + String.valueOf(itemGroupList.getItemGroupsList().get(groupIdForTextView).getItmsGrpNam());
+                setItemsRecyclerAdapter(temp_search);
+                return;
+            }
+
+            //Case Writing text
+            if (SEARCH_LENGTH <= query.length()) {
+
+                temp_search = new ArrayList<>();
+                if (searchArrayMatrix.size() == 0)
+                    addSearchListToMatrix(getShowList(), query.length());
+
+                for (Coach m : searchArrayMatrix.get(searchArrayMatrix.size() - 1)) {
+                    boolean match = true;
+                    for (int i = 0; i < words.size(); i++) {
+                        match = m.getFullName().toLowerCase().contains(words.get(i).toLowerCase());
+                        if (!match)
+                            break;
+                    }
+                    if (match)
+                        temp_search.add(m);
+                }
+                addSearchListToMatrix(temp_search, query.length());
+            } else {//Case Deleting text
+                //searchArrayMatrix.remove(searchArrayMatrix.size()-1);
+                removeSearchListFromMatrix(temp_search, query.length() - 1);
+                temp_search = searchArrayMatrix.get(searchArrayMatrix.size() - 1);
+            }
+
+            SEARCH_LENGTH = query.length();
+
+            setItemsRecyclerAdapter(temp_search);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setItemsRecyclerAdapter(List<Coach> mDataSet) {
+        if (mDataSet == null) return;
 
 
-    private void initialTrainingListImages(View view){
+        if (searchRecycler.getAdapter() != null)
+            ((SearchAdapter) searchRecycler.getAdapter()).setDataSet(mDataSet);
+    }
+
+    private ArrayList<Coach> getShowList() {
+        if (mShowList == null || mShowList.isEmpty())
+            return mDataSet;
+        else
+            return mShowList;
+    }
+
+    private void addSearchListToMatrix(ArrayList<Coach> list, int textLength) {
+        if (searchArrayMatrix == null)
+            searchArrayMatrix = new ArrayList<>();
+        while (searchArrayMatrix.size() > textLength - 1) {
+            if (searchArrayMatrix.size() > 0)
+                searchArrayMatrix.remove(searchArrayMatrix.size() - 1);
+        }
+
+        while (searchArrayMatrix.size() < textLength - 1) {
+            searchArrayMatrix.add(new ArrayList<>());
+        }
+
+        if (searchArrayMatrix.size() != 0)
+            searchArrayMatrix.add(list);
+        else
+            searchArrayMatrix.add(getShowList());
+    }
+
+    private void removeSearchListFromMatrix(ArrayList<Coach> list, int textLength) {
+        if (searchArrayMatrix == null)
+            searchArrayMatrix = new ArrayList<>();
+
+        if (searchArrayMatrix == null)
+            searchArrayMatrix = new ArrayList<>();
+        while (searchArrayMatrix.size() - 1 > textLength) {
+            if (searchArrayMatrix.size() > 0)
+                searchArrayMatrix.remove(searchArrayMatrix.size() - 1);
+        }
+
+        while (searchArrayMatrix.size() - 1 < textLength) {
+            searchArrayMatrix.add(new ArrayList<Coach>());
+        }
+
+        if (searchArrayMatrix.size() > 0)
+            searchArrayMatrix.remove(searchArrayMatrix.size() - 1);
+    }
+
+
+    private void initialTrainingListImages(View view) {
         mDataSet = new ArrayList<>();
-        mDataSet.add(new Coach(0,"shon ohana",24,"blala","0541111111","1 year",null,null,null,null));
-        mDataSet.add(new Coach(0,"eden barhum",24,"blala","0541111111","1 year",null,null,null,null));
-        mDataSet.add(new Coach(0,"dolev ifergan",24,"blala","0541111111","1 year",null,null,null,null));
 
+        databaseRef = FirebaseDatabase.getInstance().getReference("coaches");
 
-        RecyclerView searchRecycler = view.findViewById(R.id.rv_search);
-        adapter = new SearchAdapter(getContext(),mDataSet);
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Coach coach = snapshot.getValue(Coach.class);
+                    mDataSet.add(coach);
+                    adapter = new SearchAdapter(getContext(), mDataSet);
 
-        searchRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        searchRecycler.setAdapter(adapter);
+                    searchRecycler = view.findViewById(R.id.rv_search);
+                    searchRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                    searchRecycler.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 

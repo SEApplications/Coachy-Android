@@ -85,6 +85,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         };
     }
 
+    public void setDataSet(List<Coach> mDataSet) {
+        this.mDataSet = mDataSet;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView name;

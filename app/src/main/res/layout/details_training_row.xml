@@ -78,7 +78,9 @@
                      android:src="@drawable/profile_eden"/>
 
 
+
             </LinearLayout>
+
 
 
             <View

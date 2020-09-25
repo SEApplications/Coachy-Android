@@ -47,7 +47,7 @@ public class TrainingTypeFragment extends Fragment {
 
         RecyclerView trainingRecycler = view.findViewById(R.id.rv_training_types);
         TrainingTypeAdapter adapter = new TrainingTypeAdapter(getContext(),mDataSet);
-
+        trainingRecycler.setHasFixedSize(true);
         trainingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         trainingRecycler.setAdapter(adapter);
 

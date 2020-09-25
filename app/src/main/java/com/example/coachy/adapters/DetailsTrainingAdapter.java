@@ -6,11 +6,15 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.coachy.R;
 import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
+import com.example.coachy.models.UploadFirebase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Random;
@@ -22,8 +26,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTrainingAdapter.ViewHolder>  {
 
-
-    //for the images
     private List<Coach> mDataSet;
     private Context context;
 //    private TrainingTypeAdapter.OnClickSelected callback;
@@ -60,6 +62,10 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
         holder.cardView.setOnClickListener(b->{
            // callback.onTrainingTypeSelected(mDataSet.get(position));
         });
+
+        Picasso.get().load(mDataSet.get(position).getProfileImage()).placeholder(R.drawable.aerobic).into(holder.coachProfile);
+        holder.coachName.setText(mDataSet.get(position).getFullName());
+
     }
 
     @Override
@@ -78,12 +84,14 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
         private CircleImageView coachProfile;
         private CardView cardView;
         private FloatingActionButton playVideoBtn;
+        private TextView coachName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             coachProfile = itemView.findViewById(R.id.im_coach_profile);
             cardView = itemView.findViewById(R.id.parent_layout);
             playVideoBtn = itemView.findViewById(R.id.fab_play);
+            coachName = itemView.findViewById(R.id.tv_coach_name);
         }
     }
 

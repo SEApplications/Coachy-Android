@@ -5,38 +5,40 @@ import java.util.List;
 
 public class Coach implements Serializable {
 
-    private int id;
+    private String id;
     private String fullName;
     private int age;
     private String description;
     private String phone;
     private String seniority;
-    private List<String> specialize;
+//    private List<String> specialize;
     private String profileImage;
-    private String diploma;
-    private List<Video> videos;
+//    private String diploma;
+//    private List<Video> videos;
 
     public Coach() {
     }
 
-    public Coach(int id, String fullName, int age, String description, String phone, String seniority, List<String> specialize, String profileImage, String diploma, List<Video> videos) {
+
+
+    public Coach(String id, String fullName, int age, String description, String phone, String seniority, String profileImage) {
         this.id = id;
         this.fullName = fullName;
         this.age = age;
         this.description = description;
         this.phone = phone;
         this.seniority = seniority;
-        this.specialize = specialize;
+//        this.specialize = specialize;
         this.profileImage = profileImage;
-        this.diploma = diploma;
-        this.videos = videos;
+//        this.diploma = diploma;
+//        this.videos = videos;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -80,14 +82,14 @@ public class Coach implements Serializable {
         this.seniority = seniority;
     }
 
-    public List<String> getSpecialize() {
-        return specialize;
-    }
-
-    public void setSpecialize(List<String> specialize) {
-        this.specialize = specialize;
-    }
-
+//    public List<String> getSpecialize() {
+//        return specialize;
+//    }
+//
+//    public void setSpecialize(List<String> specialize) {
+//        this.specialize = specialize;
+//    }
+//
     public String getProfileImage() {
         return profileImage;
     }
@@ -95,22 +97,22 @@ public class Coach implements Serializable {
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
-
-    public String getDiploma() {
-        return diploma;
-    }
-
-    public void setDiploma(String diploma) {
-        this.diploma = diploma;
-    }
-
-    public List<Video> getVideos() {
-        return videos;
-    }
-
-    public void setVideos(List<Video> videos) {
-        this.videos = videos;
-    }
+//
+//    public String getDiploma() {
+//        return diploma;
+//    }
+//
+//    public void setDiploma(String diploma) {
+//        this.diploma = diploma;
+//    }
+//
+//    public List<Video> getVideos() {
+//        return videos;
+//    }
+//
+//    public void setVideos(List<Video> videos) {
+//        this.videos = videos;
+//    }
 
     @Override
     public String toString() {
@@ -120,11 +122,11 @@ public class Coach implements Serializable {
                 ", age=" + age +
                 ", description='" + description + '\'' +
                 ", phone='" + phone + '\'' +
-                ", seniority='" + seniority + '\'' +
-                ", specialize=" + specialize +
-                ", profileImage='" + profileImage + '\'' +
-                ", diploma='" + diploma + '\'' +
-                ", videos=" + videos +
-                '}';
+                ", seniority='" + seniority + '\'' ;
+//                ", specialize=" + specialize +
+//                ", profileImage='" + profileImage + '\'' +
+//                ", diploma='" + diploma + '\'' +
+//                ", videos=" + videos +
+//                '}';
     }
 }
