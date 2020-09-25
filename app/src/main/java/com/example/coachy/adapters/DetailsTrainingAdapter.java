@@ -1,6 +1,8 @@
 package com.example.coachy.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import com.example.coachy.models.TrainingType;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTrainingAdapter.ViewHolder>  {
+
 
     //for the images
     private List<Coach> mDataSet;
@@ -49,9 +53,9 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
      //   holder.trainingType.setImageResource(mDataSet.get(position).getTrainingImage());
 
- //       Random rnd = new Random();
- //       int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
- //       holder.playVideoBtn.setBackgroundTintList(color);
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        holder.playVideoBtn.setBackgroundTintList(ColorStateList.valueOf(color));
 
         holder.cardView.setOnClickListener(b->{
            // callback.onTrainingTypeSelected(mDataSet.get(position));
