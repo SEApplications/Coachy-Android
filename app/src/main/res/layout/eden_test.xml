@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/profileseven_bg"
+        android:layout_above="@+id/laythree">
+
+       <!-- <include layout="@layout/toolbar_profilefour"/>-->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom"
+            android:scaleType="fitXY"
+            android:src="@drawable/bgshape"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="bottom">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.github.siyamed.shapeimageview.CircularImageView
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/profile_eden"
+                    />
+
+                <LinearLayout
+                    android:layout_width="42.2dp"
+                    android:layout_gravity="bottom|end"
+                    android:gravity="center"
+                    android:background="@drawable/bgcircle"
+                    android:layout_height="42.2dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_add_black_24dp"
+                        app:tint="#e98725" />
+
+                </LinearLayout>
+
+
+
+
+            </FrameLayout>
+        </LinearLayout>
+
+
+
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:id="@+id/laythree"
+        android:layout_above="@+id/laytwo"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            android:textColor="#131314"
+            android:layout_marginBottom="7dp"
+            android:lineSpacingExtra="5sp"
+            android:gravity="center"
+            android:text="Eden Barhum"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location_on_black_24dp"
+                app:tint="#88888f" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13.4sp"
+                android:textColor="#88888f"
+                android:layout_marginLeft="7dp"
+                android:lineSpacingExtra="2.6sp"
+                android:text="Israel, Rishon le-zion"
+                android:layout_marginStart="7dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:id="@+id/laytwo"
+        android:layout_margin="20dp"
+        android:layout_above="@+id/btn_layout"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_psmission"
+                android:gravity="center_horizontal"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11.5sp"
+                android:textColor="#e98725"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="1.5sp"
+                android:gravity="center_horizontal"
+                android:text="Missions"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_psglob"
+                android:gravity="center_horizontal"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11.5sp"
+                android:textColor="#88888f"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="1.5sp"
+                android:gravity="center_horizontal"
+                android:text="Planets"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_pszone"
+                android:gravity="center_horizontal"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11.5sp"
+                android:textColor="#88888f"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="1.5sp"
+                android:gravity="center_horizontal"
+                android:text="Zones"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30.3dp"
+        android:layout_marginLeft="30.3dp"
+        android:layout_marginBottom="30.3dp"
+        android:id="@+id/btn_layout"
+        android:orientation="vertical"
+        android:layout_marginStart="30.3dp">
+
+<!--        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="vdvfdbfd"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="vdvfdbfd"/>
+
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="vdvfdbfd"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="vdvfdbfd"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="vdvfdbfd"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="vdvfdbfd"/>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/recyclerview"
+            android:layout_height="match_parent"/>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

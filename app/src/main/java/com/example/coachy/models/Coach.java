@@ -1,7 +1,6 @@
 package com.example.coachy.models;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Coach implements Serializable {
 
@@ -15,6 +14,7 @@ public class Coach implements Serializable {
     private String profileImage;
 //    private String diploma;
 //    private List<Video> videos;
+    private String video;
 
     public Coach() {
     }
@@ -32,6 +32,15 @@ public class Coach implements Serializable {
         this.profileImage = profileImage;
 //        this.diploma = diploma;
 //        this.videos = videos;
+    }
+
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 
     public String getId() {
