@@ -13,7 +13,9 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.coachy.R;
+import com.example.coachy.adapters.TrainingListAdapter;
 import com.example.coachy.adapters.TrainingTypeAdapter;
+import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
 import com.example.coachy.models.Video;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,10 +33,10 @@ import com.squareup.picasso.Picasso;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import me.ibrahimsn.lib.SmoothBottomBar;
 
-public class MainActivity extends AppCompatActivity implements TrainingTypeAdapter.OnClickSelected{
+public class MainActivity extends AppCompatActivity implements TrainingTypeAdapter.OnClickSelected,
+                                                                TrainingListAdapter.OnClickSelected {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_VIDEO_REQUEST = 2;
@@ -84,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
 //        DatabaseReference for_shon = myRef.child("for shon");
 //        for_shon.setValue("hello shon");
 //        System.out.println("key shon" + for_shon.getKey());
-//
-////         Read from the database
+
+        // Read from the database
 //        myRef.addValueEventListener(new ValueEventListener() {
 //                                        @Override
 //                                        public void onDataChange(DataSnapshot dataSnapshot) {
@@ -102,30 +104,69 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
 //                                    }
 
         /** write video for storage **/
-//        video = new Video();
-//        storageRef = FirebaseStorage.getInstance().getReference("Videos");
-//        databaseRef = FirebaseDatabase.getInstance().getReference("coaches");
-//        videoView = findViewById(R.id.video_view);
-//        mediaController = new MediaController(this);
-//        videoView.setMediaController(mediaController);
-//        videoView.start();
-//        uploadVideo = findViewById(R.id.btn_upload);
-//
-//        videoView.setOnClickListener(v->{
-//            chooseVideo();
-//        });
-//
-//        uploadVideo.setOnClickListener(v->{
-//            if (uploadTask != null && uploadTask.isInProgress()){
-//                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
-//            }else
-//            uploadVideo();
-//        });
+        video = new Video();
+        storageRef = FirebaseStorage.getInstance().getReference("Videos");
+        databaseRef = FirebaseDatabase.getInstance().getReference("coaches");
+        videoView = findViewById(R.id.video_view);
+        mediaController = new MediaController(this);
+        videoView.setMediaController(mediaController);
+        videoView.start();
+        uploadVideo = findViewById(R.id.btn_upload);
+
+        videoView.setOnClickListener(v->{
+            chooseVideo();
+        });
+
+/*        uploadVideo.setOnClickListener(v->{
+            uploadVideo();
+        });*/
+
+        uploadVideo.setOnClickListener(v->{
+            if (uploadTask != null && uploadTask.isInProgress()){
+                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
+            }else
+                uploadVideo();
+        });
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new TrainingTypeFragment()).commit();
+
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new TrainingTypeFragment()).commit();
 
     }
+
+/*    private void uploadVideo() {
+        if (videoUri != null){
+            final StorageReference reference = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(videoUri));
+
+            uploadTask = reference.putFile(videoUri);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()){
+                        throw task.getException();
+                    }
+                    return reference.getDownloadUrl();
+                }
+            })
+                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()){
+                                Uri downloadUrl = task.getResult();
+                                video.setVideoUrl(downloadUrl.toString());
+                                databaseRef.child("0").setValue(video);
+                            }else {
+                                Toast.makeText(MainActivity.this, "shit", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+        }else {
+            Toast.makeText(this, "fieks empty", Toast.LENGTH_SHORT).show();
+        }
+    }*/
 
     private void uploadVideo() {
         if (videoUri != null){
@@ -159,9 +200,41 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
         }else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
 
+
+//            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+//                @Override
+//                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//                    if (!task.isSuccessful()){
+//                        throw task.getException();
+//                    }
+//                    return reference.getDownloadUrl();
+//                }
+//            })
+//                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Uri> task) {
+//                            if (task.isSuccessful()){
+//                                Uri downloadUrl = task.getResult();
+//                                video.setVideoUrl(downloadUrl.toString());
+//                                databaseRef.child("0").setValue(video);
+//                            }else {
+//                                Toast.makeText(MainActivity.this, "shit", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//
+//        }else {
+//            Toast.makeText(this, "fieks empty", Toast.LENGTH_SHORT).show();
         }
     }
 
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
 
     private void chooseVideo(){
         Intent intent = new Intent();
@@ -215,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
 
     private void initView() {
         SmoothBottomBar bottomNavigationBar = (SmoothBottomBar) findViewById(R.id.bottomBarMain);
-//        uploadPhoto = findViewById(R.id.btn_upload);
+        uploadPhoto = findViewById(R.id.btn_upload);
 //        progressBar = findViewById(R.id.progress);
 //        profileImage = findViewById(R.id.profile_image);
 
@@ -229,9 +302,6 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
                     return true;
                 case 1:
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SearchFragment()).commit();
-                    return true;
-                case 2:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new ProfileFragment()).commit();
                     return true;
                 default:
                     return false;
@@ -258,28 +328,49 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
         replaceFragment(trainingType);
     }
 
-//    /** for the images **/
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null
-//            && data.getData() != null){
-//            imageUri = data.getData();
-//
-//
-//            Picasso.get().load(imageUri).into(profileImage);
-//
-//        }else if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null
-//                && data.getData() != null){
-//
-//            videoUri = data.getData();
-//
-//            videoView.setVideoURI(videoUri);
-//
-//
-//        }else{
-//            Toast.makeText(this, "shit", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    /** for the images **/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null
+            && data.getData() != null){
+            imageUri = data.getData();
+
+
+            Picasso.get().load(imageUri).into(profileImage);
+
+        }else if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null
+                && data.getData() != null){
+
+            videoUri = data.getData();
+
+            videoView.setVideoURI(videoUri);
+
+
+        }else{
+            Toast.makeText(this, "shit", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onCoachSelected(Coach coachSelected) {
+        OpenCoachProfile(coachSelected);
+    }
+
+    @Override
+    public void onTrainingVideoSelected(Coach coachSelected) {
+        Intent intent = new Intent(this, CoachVideo.class);
+        intent.putExtra("Coach", coachSelected);
+        startActivity(intent);
+    }
+
+    private void OpenCoachProfile(Coach coachSelected){
+        Intent intent = new Intent(this, CoachProfile.class);
+        intent.putExtra("Coach", coachSelected);
+        startActivity(intent);
+
+    }
+
 }

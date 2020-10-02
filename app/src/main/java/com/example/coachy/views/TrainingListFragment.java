@@ -33,7 +33,6 @@ public class TrainingListFragment extends Fragment {
 
     public TrainingListFragment(TrainingType trainingType){
         this.type = trainingType;
-
     }
 
     @Override
