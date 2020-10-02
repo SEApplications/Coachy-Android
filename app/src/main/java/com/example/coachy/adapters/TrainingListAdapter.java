@@ -10,10 +10,7 @@ import android.widget.TextView;
 
 import com.example.coachy.R;
 import com.example.coachy.models.Coach;
-import com.example.coachy.models.TrainingType;
-import com.example.coachy.models.UploadFirebase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -24,23 +21,23 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTrainingAdapter.ViewHolder>  {
+public class TrainingListAdapter extends RecyclerView.Adapter<TrainingListAdapter.ViewHolder>  {
 
     private List<Coach> mDataSet;
     private Context context;
-//    private TrainingTypeAdapter.OnClickSelected callback;
+    private OnClickSelected callback;
 
-    public DetailsTrainingAdapter(Context context, List<Coach> mDataSet) {
+    public TrainingListAdapter(Context context, List<Coach> mDataSet) {
         this.context = context;
         this.mDataSet = mDataSet;
- //       this.callback =(TrainingTypeAdapter.OnClickSelected)context;
+        this.callback =(OnClickSelected)context;
 
     }
 
     public interface OnClickSelected{
 
-        public void onTrainingTypeSelected(TrainingType trainingType);
-
+        public void onCoachSelected(Coach coachSelected);
+        public void onTrainingVideoSelected(Coach coachSelected);
     }
 
 
@@ -60,11 +57,25 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
         holder.playVideoBtn.setBackgroundTintList(ColorStateList.valueOf(color));
 
         holder.cardView.setOnClickListener(b->{
-           // callback.onTrainingTypeSelected(mDataSet.get(position));
+            callback.onCoachSelected(mDataSet.get(position));
         });
 
         Picasso.get().load(mDataSet.get(position).getProfileImage()).placeholder(R.drawable.aerobic).into(holder.coachProfile);
         holder.coachName.setText(mDataSet.get(position).getFullName());
+
+        holder.playVideoBtn.setOnClickListener(b->{
+            callback.onTrainingVideoSelected(mDataSet.get(position));
+        });
+
+/*        MediaController mediaController;
+        mediaController = new MediaController(context);
+        holder.videoView.setMediaController(mediaController);
+        holder.videoView.setVideoPath(mDataSet.get(position).getVideo());
+        holder.videoView.start();*/
+
+     //   holder.videoView.setVideoPath(mDataSet.get(position).getVideo()).setFingerprint(position);
+
+
 
     }
 
@@ -85,6 +96,7 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
         private CardView cardView;
         private FloatingActionButton playVideoBtn;
         private TextView coachName;
+     //   private VideoView videoView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,7 +104,13 @@ public class DetailsTrainingAdapter extends RecyclerView.Adapter<DetailsTraining
             cardView = itemView.findViewById(R.id.parent_layout);
             playVideoBtn = itemView.findViewById(R.id.fab_play);
             coachName = itemView.findViewById(R.id.tv_coach_name);
+      //      videoView = itemView.findViewById(R.id.VideoView);
         }
+
+
+
+
+
     }
 
 

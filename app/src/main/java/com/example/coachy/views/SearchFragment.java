@@ -3,37 +3,28 @@ package com.example.coachy.views;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.coachy.R;
+import com.example.coachy.adapters.SearchAdapter;
+import com.example.coachy.models.Coach;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
-
-import com.example.coachy.R;
-import com.example.coachy.adapters.DetailsTrainingAdapter;
-import com.example.coachy.adapters.SearchAdapter;
-import com.example.coachy.adapters.TrainingTypeAdapter;
-import com.example.coachy.models.Coach;
-import com.example.coachy.models.TrainingType;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
-import com.paulrybitskyi.persistentsearchview.listeners.OnSearchConfirmedListener;
-import com.paulrybitskyi.persistentsearchview.utils.VoiceRecognitionDelegate;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class SearchFragment extends Fragment {

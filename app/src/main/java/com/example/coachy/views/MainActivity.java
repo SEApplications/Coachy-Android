@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,23 +13,18 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.coachy.R;
+import com.example.coachy.adapters.TrainingListAdapter;
 import com.example.coachy.adapters.TrainingTypeAdapter;
+import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
-import com.example.coachy.models.UploadFirebase;
 import com.example.coachy.models.Video;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
@@ -39,12 +33,10 @@ import com.squareup.picasso.Picasso;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.File;
-
 import me.ibrahimsn.lib.SmoothBottomBar;
 
-public class MainActivity extends AppCompatActivity implements TrainingTypeAdapter.OnClickSelected{
+public class MainActivity extends AppCompatActivity implements TrainingTypeAdapter.OnClickSelected,
+                                                                TrainingListAdapter.OnClickSelected {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int PICK_VIDEO_REQUEST = 2;
@@ -125,16 +117,25 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
             chooseVideo();
         });
 
-        uploadVideo.setOnClickListener(v->{
+/*        uploadVideo.setOnClickListener(v->{
             uploadVideo();
+        });*/
+
+        uploadVideo.setOnClickListener(v->{
+            if (uploadTask != null && uploadTask.isInProgress()){
+                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
+            }else
+                uploadVideo();
         });
+
+
 
 
 //        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new TrainingTypeFragment()).commit();
 
     }
 
-    private void uploadVideo() {
+/*    private void uploadVideo() {
         if (videoUri != null){
             final StorageReference reference = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(videoUri));
 
@@ -165,7 +166,68 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
         }else {
             Toast.makeText(this, "fieks empty", Toast.LENGTH_SHORT).show();
         }
+    }*/
+
+    private void uploadVideo() {
+        if (videoUri != null){
+            StorageReference reference = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(videoUri));
+
+            uploadTask = reference.putFile(videoUri)
+                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Toast.makeText(MainActivity.this, "yes1", Toast.LENGTH_SHORT).show();
+                                    System.out.println("uri " + uri);
+                                    databaseRef.child("0").child("video").setValue(uri.toString());
+                                }
+                            });
+                        }
+
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            Toast.makeText(MainActivity.this, "No1", Toast.LENGTH_SHORT).show();
+                            // ...
+                        }
+                    });
+
+        }else {
+            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+
+
+//            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+//                @Override
+//                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//                    if (!task.isSuccessful()){
+//                        throw task.getException();
+//                    }
+//                    return reference.getDownloadUrl();
+//                }
+//            })
+//                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Uri> task) {
+//                            if (task.isSuccessful()){
+//                                Uri downloadUrl = task.getResult();
+//                                video.setVideoUrl(downloadUrl.toString());
+//                                databaseRef.child("0").setValue(video);
+//                            }else {
+//                                Toast.makeText(MainActivity.this, "shit", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//
+//        }else {
+//            Toast.makeText(this, "fieks empty", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void openFileChooser() {
         Intent intent = new Intent();
@@ -256,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_right_to_left,R.anim.exit_left_to_right,
                         R.anim.enter_left_to_right,R.anim.exit_right_to_left)
-                .replace(R.id.frame, new DetailsTrainingFragment(trainingType)).addToBackStack("back").commit();
+                .replace(R.id.frame, new TrainingListFragment(trainingType)).addToBackStack("back").commit();
 
     }
 
@@ -289,5 +351,26 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
         }else{
             Toast.makeText(this, "shit", Toast.LENGTH_SHORT).show();
         }
+
     }
+
+    @Override
+    public void onCoachSelected(Coach coachSelected) {
+        OpenCoachProfile(coachSelected);
+    }
+
+    @Override
+    public void onTrainingVideoSelected(Coach coachSelected) {
+        Intent intent = new Intent(this, CoachVideo.class);
+        intent.putExtra("Coach", coachSelected);
+        startActivity(intent);
+    }
+
+    private void OpenCoachProfile(Coach coachSelected){
+        Intent intent = new Intent(this, CoachProfile.class);
+        intent.putExtra("Coach", coachSelected);
+        startActivity(intent);
+
+    }
+
 }
