@@ -1,6 +1,7 @@
 package com.example.coachy.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Coach implements Serializable {
 
@@ -10,9 +11,9 @@ public class Coach implements Serializable {
     private String description;
     private String phone;
     private String seniority;
-//    private List<String> specialize;
+    private List<String> specialize;
     private String profileImage;
-//    private String diploma;
+    private String diploma;
 //    private List<Video> videos;
     private String video;
 
@@ -34,6 +35,18 @@ public class Coach implements Serializable {
 //        this.videos = videos;
     }
 
+    public Coach(String id, String fullName, int age, String description, String phone, String seniority, List<String> specialize, String profileImage, String diploma, String video) {
+        this.id = id;
+        this.fullName = fullName;
+        this.age = age;
+        this.description = description;
+        this.phone = phone;
+        this.seniority = seniority;
+        this.specialize = specialize;
+        this.profileImage = profileImage;
+        this.diploma = diploma;
+        this.video = video;
+    }
 
     public String getVideo() {
         return video;
@@ -91,14 +104,14 @@ public class Coach implements Serializable {
         this.seniority = seniority;
     }
 
-//    public List<String> getSpecialize() {
-//        return specialize;
-//    }
-//
-//    public void setSpecialize(List<String> specialize) {
-//        this.specialize = specialize;
-//    }
-//
+    public List<String> getSpecialize() {
+        return specialize;
+    }
+
+    public void setSpecialize(List<String> specialize) {
+        this.specialize = specialize;
+    }
+
     public String getProfileImage() {
         return profileImage;
     }
@@ -106,15 +119,15 @@ public class Coach implements Serializable {
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
-//
-//    public String getDiploma() {
-//        return diploma;
-//    }
-//
-//    public void setDiploma(String diploma) {
-//        this.diploma = diploma;
-//    }
-//
+
+    public String getDiploma() {
+        return diploma;
+    }
+
+    public void setDiploma(String diploma) {
+        this.diploma = diploma;
+    }
+
 //    public List<Video> getVideos() {
 //        return videos;
 //    }

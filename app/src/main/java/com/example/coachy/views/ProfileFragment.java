@@ -49,40 +49,40 @@ public class ProfileFragment extends Fragment implements DialogInterface.OnDismi
         initializeViews(v);
 
 
-        //Read from the database
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("coaches").child("0");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Coach coach = dataSnapshot.getValue(Coach.class);
-                coachName.setText(coach.getFullName());
-                coachAge.setText(String.valueOf(coach.getAge()));
-                coachSeniority.setText(coach.getSeniority());
-                coachDescription.setText(coach.getDescription());
-
-                for (int i = 0; i < coach.getSpecialize().size(); i++) {
-                    coachSpecialize.append(coach.getSpecialize().get(i) + ", ");
-                }
-
-
-                Picasso.get().load(coach.getDiploma()).into(diploma);
-                Picasso.get().load(coach.getProfileImage()).into(profuleImage);
-
-
-                VideosAdapter adapter = new VideosAdapter(getContext(),coach.getVideo());
-                videoRecyclerView.setHasFixedSize(true);
-                videoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                videoRecyclerView.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        //Read from the database
+//        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("coaches").child("0");
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                Coach coach = dataSnapshot.getValue(Coach.class);
+//                coachName.setText(coach.getFullName());
+//                coachAge.setText(String.valueOf(coach.getAge()));
+//                coachSeniority.setText(coach.getSeniority());
+//                coachDescription.setText(coach.getDescription());
+//
+//                for (int i = 0; i < coach.getSpecialize().size(); i++) {
+//                    coachSpecialize.append(coach.getSpecialize().get(i) + ", ");
+//                }
+//
+//
+//                Picasso.get().load(coach.getDiploma()).into(diploma);
+//                Picasso.get().load(coach.getProfileImage()).into(profuleImage);
+//
+//
+//                VideosAdapter adapter = new VideosAdapter(getContext(),coach.getVideo());
+//                videoRecyclerView.setHasFixedSize(true);
+//                videoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//                videoRecyclerView.setAdapter(adapter);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
 
@@ -90,18 +90,18 @@ public class ProfileFragment extends Fragment implements DialogInterface.OnDismi
     }
 
     private void initializeViews(View view){
-        coachName = view.findViewById(R.id.coach_name);
-        coachAge = view.findViewById(R.id.coach_age);
-        coachDescription = view.findViewById(R.id.coach_description);
-        coachSeniority = view.findViewById(R.id.coach_seniority);
-        coachSpecialize = view.findViewById(R.id.coach_specialize);
-        diploma = view.findViewById(R.id.diploma_image_view);
-        profuleImage = view.findViewById(R.id.im_coach_profile);
-        videoRecyclerView = view.findViewById(R.id.videos_rv);
-
+//        coachName = view.findViewById(R.id.coach_name);
+//        coachAge = view.findViewById(R.id.coach_age);
+//        coachDescription = view.findViewById(R.id.coach_description);
+//        coachSeniority = view.findViewById(R.id.coach_seniority);
+//        coachSpecialize = view.findViewById(R.id.coach_specialize);
+//        diploma = view.findViewById(R.id.diploma_image_view);
+//        profuleImage = view.findViewById(R.id.im_coach_profile);
+//        videoRecyclerView = view.findViewById(R.id.videos_rv);
+//
         createProfile = view.findViewById(R.id.create_profile_button);
-        createProfile.setVisibility(View.VISIBLE);
-
+//        createProfile.setVisibility(View.VISIBLE);
+//
         createProfile.setOnClickListener(b->{
             Dialog_CochApproach dialog = new Dialog_CochApproach();
             dialog.show(getChildFragmentManager(), dialog.getTag());
