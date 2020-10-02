@@ -104,34 +104,34 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
 //                                    }
 
         /** write video for storage **/
-        video = new Video();
-        storageRef = FirebaseStorage.getInstance().getReference("Videos");
-        databaseRef = FirebaseDatabase.getInstance().getReference("coaches");
-        videoView = findViewById(R.id.video_view);
-        mediaController = new MediaController(this);
-        videoView.setMediaController(mediaController);
-        videoView.start();
-        uploadVideo = findViewById(R.id.btn_upload);
-
-        videoView.setOnClickListener(v->{
-            chooseVideo();
-        });
-
-/*        uploadVideo.setOnClickListener(v->{
-            uploadVideo();
-        });*/
-
-        uploadVideo.setOnClickListener(v->{
-            if (uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
-            }else
-                uploadVideo();
-        });
-
-
+//        video = new Video();
+//        storageRef = FirebaseStorage.getInstance().getReference("Videos");
+//        databaseRef = FirebaseDatabase.getInstance().getReference("coaches");
+//        videoView = findViewById(R.id.video_view);
+//        mediaController = new MediaController(this);
+//        videoView.setMediaController(mediaController);
+//        videoView.start();
+////        uploadVideo = findViewById(R.id.btn_upload);
+//
+//        videoView.setOnClickListener(v->{
+//            chooseVideo();
+//        });
+//
+///*        uploadVideo.setOnClickListener(v->{
+//            uploadVideo();
+//        });*/
+//
+//        uploadVideo.setOnClickListener(v->{
+//            if (uploadTask != null && uploadTask.isInProgress()){
+//                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
+//            }else
+//                uploadVideo();
+//        });
 
 
-//        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new TrainingTypeFragment()).commit();
+
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new TrainingTypeFragment()).commit();
 
     }
 
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
 
     private void initView() {
         SmoothBottomBar bottomNavigationBar = (SmoothBottomBar) findViewById(R.id.bottomBarMain);
-        uploadPhoto = findViewById(R.id.btn_upload);
+//        uploadPhoto = findViewById(R.id.btn_upload);
 //        progressBar = findViewById(R.id.progress);
 //        profileImage = findViewById(R.id.profile_image);
 
@@ -302,6 +302,9 @@ public class MainActivity extends AppCompatActivity implements TrainingTypeAdapt
                     return true;
                 case 1:
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SearchFragment()).commit();
+                    return true;
+                case 2:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new ProfileFragment()).commit();
                     return true;
                 default:
                     return false;

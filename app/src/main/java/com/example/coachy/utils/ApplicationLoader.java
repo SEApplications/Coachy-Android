@@ -1,4 +1,4 @@
-package com.example.coachy.models;
+package com.example.coachy.utils;
 
 import android.app.Application;
 import android.content.Context;
