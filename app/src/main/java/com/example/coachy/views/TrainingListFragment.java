@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.coachy.R;
-import com.example.coachy.adapters.DetailsTrainingAdapter;
+import com.example.coachy.adapters.TrainingListAdapter;
 import com.example.coachy.models.Coach;
 import com.example.coachy.models.TrainingType;
 import com.example.coachy.models.UploadFirebase;
@@ -24,14 +24,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DetailsTrainingFragment extends Fragment {
+public class TrainingListFragment extends Fragment {
 
     private TrainingType type;
     private List<Coach> coachList;
     private DatabaseReference databaseRef;
     private List<UploadFirebase> uploads;
 
-    public DetailsTrainingFragment(TrainingType trainingType){
+    public TrainingListFragment(TrainingType trainingType){
         this.type = trainingType;
 
     }
@@ -77,7 +77,7 @@ public class DetailsTrainingFragment extends Fragment {
                     coaches.add(coach);
 
                 }
-                DetailsTrainingAdapter adapter = new DetailsTrainingAdapter(getContext(),coaches);
+                TrainingListAdapter adapter = new TrainingListAdapter(getContext(),coaches);
                 trainingRecycler.setAdapter(adapter);
             }
 

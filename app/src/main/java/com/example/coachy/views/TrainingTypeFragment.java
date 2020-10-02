@@ -44,6 +44,7 @@ public class TrainingTypeFragment extends Fragment {
         mDataSet.add(new TrainingType(5,R.drawable.yoga,"yoga"));
         mDataSet.add(new TrainingType(6,R.drawable.pilatis,"pilatis"));
         mDataSet.add(new TrainingType(7,R.drawable.aerobic,"aerobic"));
+        mDataSet.add(new TrainingType(8,R.drawable.trx,"trx"));
 
         RecyclerView trainingRecycler = view.findViewById(R.id.rv_training_types);
         TrainingTypeAdapter adapter = new TrainingTypeAdapter(getContext(),mDataSet);

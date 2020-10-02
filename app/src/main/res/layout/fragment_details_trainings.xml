@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#6C6F79"
-    tools:context=".views.DetailsTrainingFragment">
+    tools:context=".views.TrainingListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_training_coaches"
